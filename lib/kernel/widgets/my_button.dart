@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 class MyButton extends StatelessWidget {
   final Function()? onTap;
 
-  const MyButton({super.key, required this.onTap});
+  final bool isDisabled;
+  final String title;
+
+  const MyButton(
+      {super.key,
+      required this.onTap,
+      required this.isDisabled,
+      required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +20,13 @@ class MyButton extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: const Color(0xFF4D53DD),
+          color: isDisabled ? Colors.grey : const Color(0xFF4D53DD),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            "Iniciar sesión",
-            style: TextStyle(
+            title,
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,
