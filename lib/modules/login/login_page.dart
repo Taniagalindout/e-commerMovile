@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
                   title: 'Email',
                   controller: usernameController,
                   hintText: 'Correo electrónico',
-                  obscureText: false,
+                  obscureText: false,enabled: true,
                 ),
 
                 const SizedBox(height: 20),
@@ -65,7 +65,7 @@ class LoginPage extends StatelessWidget {
                   title: 'Contraseña',
                   controller: passwordController,
                   hintText: 'Contraseña',
-                  obscureText: true,
+                  obscureText: true, enabled: true,
                 ),
 
                 const SizedBox(height: 10),

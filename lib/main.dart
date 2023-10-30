@@ -1,4 +1,5 @@
 import 'package:e_commerce/kernel/widgets/splash.dart';
+import 'package:e_commerce/modules/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'modules/login/login_page.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Splash(),
         '/login': (context) => LoginPage(),
+        '/profile': (context) => Profile(),
       },
     );
   }
