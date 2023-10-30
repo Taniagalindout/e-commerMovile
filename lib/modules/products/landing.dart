@@ -171,6 +171,9 @@ class _MainAppState extends State<Home> {
                               '${snapshot.data![1]!} ${snapshot.data![2]!}'),
                           accountEmail: Text(snapshot.data![0]!),
                           currentAccountPicture: GestureDetector(
+                             onTap: (){
+                              Navigator.pushNamed(context, '/profile');
+                            },
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
                               child: Text(
@@ -213,18 +216,18 @@ class _MainAppState extends State<Home> {
                   child: const ListTile(
                     title: Text('Home'),
                     leading: Icon(Icons.home),
+                    
                   ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const ListTile(
-                    title: Text('Mis compras'),
-                    leading: Icon(Icons.shop),
+                  InkWell(
+                    onTap: () {},
+                    child: const ListTile(
+                      title: Text('Mis compras'),
+                      leading: Icon(Icons.shop),
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const ListTile(
+                  InkWell(
+                    onTap: () {},
+                    child: const ListTile(
                     title: Text('Wishlist'),
                     leading: Icon(Icons.star),
                   ),
