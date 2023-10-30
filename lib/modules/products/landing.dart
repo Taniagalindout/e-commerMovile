@@ -1,6 +1,7 @@
 import 'package:e_commerce/modules/login/login_page.dart';
 import 'package:e_commerce/modules/products/detail_screen.dart';
 import 'package:e_commerce/modules/products/shopping_cart.dart';
+import 'package:e_commerce/modules/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -146,7 +147,7 @@ class _MainAppState extends State<Home> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ShoppingCartWidget(),
+                          builder: (context) => const ShoppingCartWidget(),
                         ),
                       );
                       //_scaffoldkey.currentState!.openEndDrawer();
@@ -163,7 +164,7 @@ class _MainAppState extends State<Home> {
                     future: _email(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<String?>> snapshot) {
-                      Widget result = const Text('Cargando');
+                      Widget result = const CircularProgressIndicator();
                       if (snapshot.hasData) {
                         result = UserAccountsDrawerHeader(
                           decoration: BoxDecoration(color: temaActual),
@@ -171,8 +172,12 @@ class _MainAppState extends State<Home> {
                               '${snapshot.data![1]!} ${snapshot.data![2]!}'),
                           accountEmail: Text(snapshot.data![0]!),
                           currentAccountPicture: GestureDetector(
-                             onTap: (){
-                              Navigator.pushNamed(context, '/profile');
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const Profile(),
+                                ),
+                              );
                             },
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
@@ -216,18 +221,18 @@ class _MainAppState extends State<Home> {
                   child: const ListTile(
                     title: Text('Home'),
                     leading: Icon(Icons.home),
-                    
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: const ListTile(
-                      title: Text('Mis compras'),
-                      leading: Icon(Icons.shop),
-                    ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: const ListTile(
+                    title: Text('Mis compras'),
+                    leading: Icon(Icons.shop),
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: const ListTile(
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: const ListTile(
                     title: Text('Wishlist'),
                     leading: Icon(Icons.star),
                   ),
