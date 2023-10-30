@@ -148,7 +148,9 @@ class _MainAppState extends State<Home> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, '/myshopping');
+                  },
                   child: const ListTile(
                     title: Text('Mis compras'),
                     leading: Icon(Icons.shop),
