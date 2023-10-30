@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:e_commerce/kernel/validations/validations.dart';
-import 'package:e_commerce/modules/login/register.dart';
+import 'package:e_commerce/modules/login/login_page.dart';
 import 'package:e_commerce/modules/products/landing.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/kernel/widgets/my_button.dart';
@@ -11,21 +11,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _forKey = GlobalKey<FormState>();
 
   bool _isButtonDisabled = true;
 
-  final usernameController = TextEditingController();
-
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final phoneController = TextEditingController();
 
   final dio = Dio();
 
@@ -84,79 +86,70 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 30),
-                        // logo
+                        const SizedBox(height: 10),
                         Center(
                             child: Image.asset(
                           'assets/images/logo-light.PNG',
-                          width: 200,
+                          width: 150,
                           height: 75,
                         )),
-
+                        const SizedBox(height: 10),
                         Text(
-                          'Bienvenido, comienza tus compras ahora',
-                          style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        Text(
-                          'Iniciar sesión',
+                          'Registrarse',
                           style: TextStyle(
                               color: Colors.grey[800],
                               fontSize: 25,
                               fontWeight: FontWeight.bold),
                         ),
-
-                        const SizedBox(height: 30),
-
-                        // username textfield
+                        const SizedBox(height: 20),
+                        MyTextField(
+                          title: 'Nombre',
+                          controller: nameController,
+                          hintText: 'Ingresa tu nombre',
+                          obscureText: false,
+                          validations: Validations.onlyLetters,
+                          errorText: 'Solo puede contener letras',
+                        ),
+                        const SizedBox(height: 10),
+                        MyTextField(
+                          title: 'Apellidos',
+                          controller: lastNameController,
+                          hintText: 'Ingresa tu(s) Apellido(s)',
+                          obscureText: false,
+                          validations: Validations.onlyLetters,
+                          errorText: 'Solo puede contener letras',
+                        ),
+                        const SizedBox(height: 10),
+                        MyTextField(
+                          title: 'Teléfono',
+                          controller: phoneController,
+                          hintText: 'Ingresa tu teléfono',
+                          obscureText: false,
+                          validations: Validations.phone,
+                          errorText: 'Ingresa un teléfono válido',
+                        ),
+                        const SizedBox(height: 10),
                         MyTextField(
                           title: 'Email',
-                          controller: usernameController,
+                          controller: emailController,
                           hintText: 'Correo electrónico',
                           obscureText: false,
                           validations: Validations.email,
                           errorText: 'Introduce un correo válido',
                         ),
-
-                        const SizedBox(height: 20),
-
-                        // password textfield
+                        const SizedBox(height: 10),
                         MyTextField(
                           title: 'Contraseña',
                           controller: passwordController,
-                          hintText: 'Contraseña',
+                          hintText: 'Ingresa tu contraseña',
                           obscureText: true,
                           validations: Validations.password,
                           errorText:
                               'Mínimo 8 caracteres \n1 letra mayúscula \n1 letra minúscula \n1 número \n1 caracter especial',
                         ),
-
-                        const SizedBox(height: 10),
-
-                        // forgot password?
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                '¿Olvidaste tu contraseña?',
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                            ],
-                          ),
-                        ),
-
                         const SizedBox(height: 25),
-
-                        // sign in button
                         MyButton(
-                          title: 'Iniciar sesión',
+                          title: 'Registrarse',
                           onTap: _isButtonDisabled
                               ? null
                               : () async {
@@ -166,17 +159,26 @@ class _LoginPageState extends State<LoginPage> {
                                   Response response;
                                   try {
                                     response = await dio.post(
-                                      'http://192.168.1.64:8080/api/users/login',
+                                      'http://192.168.1.64:8080/api/users',
                                       data: {
-                                        'email': usernameController.text,
-                                        'password': passwordController.text
+                                        'name': nameController.text,
+                                        'lastname': lastNameController.text,
+                                        'email': emailController.text,
+                                        'phone': phoneController.text,
+                                        'password': passwordController.text,
+                                        'rol': {'idRol': 1}
                                       },
                                     );
-
                                     if (response.statusCode == 200 ||
                                         response.statusCode == 201) {
                                       SharedPreferences prefs =
                                           await SharedPreferences.getInstance();
+                                      prefs.setString(
+                                          'email', emailController.text);
+                                      prefs.setString('name',
+                                          response.data['data']['name']);
+                                      prefs.setString('lastname',
+                                          response.data['data']['lastname']);
                                       Fluttertoast.showToast(
                                           msg:
                                               "Bienvenid@ ${response.data['data']['name']} ${response.data['data']['lastname']}",
@@ -186,12 +188,6 @@ class _LoginPageState extends State<LoginPage> {
                                           backgroundColor: Colors.grey,
                                           textColor: Colors.black,
                                           fontSize: 16.0);
-                                      prefs.setString(
-                                          'email', usernameController.text);
-                                      prefs.setString('name',
-                                          response.data['data']['name']);
-                                      prefs.setString('lastname',
-                                          response.data['data']['lastname']);
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (context) => const Home(),
@@ -213,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                       if (e.response!.data['status'] == 401) {
                                         Fluttertoast.showToast(
                                             msg:
-                                                "Usuario o contraseña incorrectos",
+                                                "${e.response!.data['message']}",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
                                             timeInSecForIosWeb: 1,
@@ -249,10 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                           isDisabled: _isButtonDisabled,
                         ),
-
                         const SizedBox(height: 30),
-
-                        // or continue with
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: Row(
@@ -280,26 +273,19 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
-
                         const SizedBox(height: 20),
-
-                        // google + apple sign in buttons
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // google button
                             SquareTile(imagePath: 'assets/images/google.png'),
                           ],
                         ),
-
                         const SizedBox(height: 20),
-
-                        // not a member? register now
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '¿No tienes una cuenta?',
+                              '¿Ya tienes una cuenta?',
                               style: TextStyle(color: Colors.grey[700]),
                             ),
                             const SizedBox(width: 4),
@@ -307,12 +293,12 @@ class _LoginPageState extends State<LoginPage> {
                               onTap: () {
                                 Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                    builder: (context) => const RegisterPage(),
+                                    builder: (context) => const LoginPage(),
                                   ),
                                 );
                               },
                               child: const Text(
-                                'Registrate',
+                                'Inicia sesión',
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -321,7 +307,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 20),
                       ],
                     ),

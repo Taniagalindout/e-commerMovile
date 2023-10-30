@@ -11,7 +11,7 @@ class DetailPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Producto'),
-        backgroundColor: Color(0xFF4D53DD),
+        backgroundColor: const Color(0xFF4D53DD),
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Color(0xFF4D53DD),
         ),
@@ -30,8 +30,8 @@ class DetailPage extends StatelessWidget {
               height: size.height / 2.5,
               width: size.width,
             ),
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Icon(
                   Icons.shopping_basket,
                   color: Colors.grey,
@@ -84,8 +84,8 @@ class DetailPage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Text(
                   'Detalles producto',
                   style: TextStyle(
@@ -102,13 +102,13 @@ class DetailPage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0, right: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Text(
                         'Marca:',
                         style: TextStyle(
@@ -127,7 +127,7 @@ class DetailPage extends StatelessWidget {
                     ],
                   ),
                   Row(
-                    children: const [
+                    children: [
                       Text(
                         'Color:',
                         style: TextStyle(
@@ -151,51 +151,49 @@ class DetailPage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
                 'Dimensiones:150.9 mm x 75.7 mm x 8.3 mmPeso194g grs.Duración de la batería:Tiempo de conversación: Hasta 65 horasiempo de espera: NATiempo de carga continua: Hasta 10 horasTecnología:Bandas y Frecuencias disponibles'),
             const SizedBox(
               height: 20,
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        children: const [
-                          Text('Precio Total'),
-                          Text(
-                            '\$15,000.00',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF4D53DD),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 120,
-                        decoration: const BoxDecoration(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text('Precio Total'),
+                        Text(
+                          '\$15,000.00',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                             color: Color(0xFF4D53DD),
-                            borderRadius: BorderRadius.all(Radius.circular(7))),
-                        child: const Center(
-                          child: Text(
-                            'Comprar',
-                            style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 120,
+                      decoration: const BoxDecoration(
+                          color: Color(0xFF4D53DD),
+                          borderRadius: BorderRadius.all(Radius.circular(7))),
+                      child: const Center(
+                        child: Text(
+                          'Comprar',
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
             )
           ],
         ),

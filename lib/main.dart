@@ -1,9 +1,10 @@
 import 'package:e_commerce/kernel/widgets/splash.dart';
+import 'package:e_commerce/modules/products/landing.dart';
 import 'package:e_commerce/modules/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'modules/login/login_page.dart';
 
-void main() {
+main() {
   runApp(const MyApp());
 }
 
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Splash(),
-        '/login': (context) => LoginPage(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => const Home(),
         '/profile': (context) => Profile(),
       },
     );

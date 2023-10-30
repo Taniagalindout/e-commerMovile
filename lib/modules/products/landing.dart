@@ -1,7 +1,10 @@
+import 'package:e_commerce/modules/login/login_page.dart';
 import 'package:e_commerce/modules/products/detail_screen.dart';
+import 'package:e_commerce/modules/products/shopping_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final List<String> imgList = [
   'https://as2.ftcdn.net/v2/jpg/04/62/99/95/1000_F_462999568_6XLccvVROTHh0ZTpMkf1UYEnkv46Mh1v.jpg',
@@ -38,6 +41,25 @@ class _MainAppState extends State<Home> {
   Color background = const Color.fromARGB(255, 236, 236, 236);
   Color darkBackground = const Color.fromARGB(255, 43, 40, 40);
   Color lightbackground = const Color.fromARGB(255, 236, 236, 236);
+
+  Future<List<String?>> _email() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+    String? name = prefs.getString('name');
+    String? lastname = prefs.getString('lastname');
+
+    return [email, name, lastname];
+  }
+
+  String obtenerIniciales(String nombre) {
+    List<String> palabras = nombre.split(' ');
+    String iniciales = '';
+    for (var i = 0; i < 2; i++) {
+      iniciales += palabras[i][0].toUpperCase();
+    }
+    return iniciales;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -122,7 +144,12 @@ class _MainAppState extends State<Home> {
                   return IconButton(
                     icon: const Icon(Icons.shopping_cart, color: Colors.white),
                     onPressed: () {
-                      _scaffoldkey.currentState!.openEndDrawer();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ShoppingCartWidget(),
+                        ),
+                      );
+                      //_scaffoldkey.currentState!.openEndDrawer();
                     },
                   );
                 },
@@ -132,24 +159,64 @@ class _MainAppState extends State<Home> {
           drawer: Drawer(
             child: ListView(
               children: <Widget>[
-                  UserAccountsDrawerHeader(
-                    decoration: BoxDecoration(color: temaActual),
-                    accountName: const Text('Samuel Cano'),
-                    accountEmail: const Text('20193tn131@utez.edu.mx'),
-                    currentAccountPicture: GestureDetector(
-                      onTap: (){
-                        Navigator.pushNamed(context, '/profile');
-                      },
-                      
-                      child: const CircleAvatar(backgroundColor: Colors.white),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: const ListTile(
-                      title: Text('Home'),
-                      leading: Icon(Icons.home),
-                    ),
+                FutureBuilder<List<String?>>(
+                    future: _email(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String?>> snapshot) {
+                      Widget result = const Text('Cargando');
+                      if (snapshot.hasData) {
+                        result = UserAccountsDrawerHeader(
+                          decoration: BoxDecoration(color: temaActual),
+                          accountName: Text(
+                              '${snapshot.data![1]!} ${snapshot.data![2]!}'),
+                          accountEmail: Text(snapshot.data![0]!),
+                          currentAccountPicture: GestureDetector(
+                             onTap: (){
+                              Navigator.pushNamed(context, '/profile');
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Text(
+                                obtenerIniciales(
+                                    '${snapshot.data![1]!} ${snapshot.data![2]!}'),
+                                style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF47BAF4),
+                                ),
+                              ),
+                            ),
+                          ),
+                          otherAccountsPictures: [
+                            IconButton(
+                                onPressed: () async {
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  prefs.remove("email");
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginPage(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.logout,
+                                  color: Colors.red,
+                                ))
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        result =
+                            const Center(child: CircularProgressIndicator());
+                      }
+                      return result;
+                    }),
+                InkWell(
+                  onTap: () {},
+                  child: const ListTile(
+                    title: Text('Home'),
+                    leading: Icon(Icons.home),
+                    
                   ),
                   InkWell(
                     onTap: () {},
@@ -194,10 +261,9 @@ class _MainAppState extends State<Home> {
           ),
           endDrawer: Drawer(
             width: carrito,
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: const <Widget>[Text('Carrito de compras')],
-            ),
+            child: ListView(scrollDirection: Axis.vertical, children: const [
+              Text('Carrito'),
+            ]),
           ),
           body: ListView(
             children: <Widget>[
@@ -228,11 +294,10 @@ class _MainAppState extends State<Home> {
                                         color: const Color(0xffF6F6F6),
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: Container(
-                                        child: const Icon(
+                                    child: const Icon(
                                       Icons.computer,
                                       size: 30,
-                                    )),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 5,
@@ -257,11 +322,10 @@ class _MainAppState extends State<Home> {
                                         color: const Color(0xffF6F6F6),
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: Container(
-                                        child: const Icon(
+                                    child: const Icon(
                                       Icons.shop,
                                       size: 30,
-                                    )),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 5,
@@ -286,11 +350,10 @@ class _MainAppState extends State<Home> {
                                         color: const Color(0xffF6F6F6),
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: Container(
-                                        child: const Icon(
+                                    child: const Icon(
                                       Icons.gamepad,
                                       size: 30,
-                                    )),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 5,
@@ -315,11 +378,10 @@ class _MainAppState extends State<Home> {
                                         color: const Color(0xffF6F6F6),
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: Container(
-                                        child: const Icon(
+                                    child: const Icon(
                                       Icons.house,
                                       size: 30,
-                                    )),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 5,
@@ -344,11 +406,10 @@ class _MainAppState extends State<Home> {
                                         color: const Color(0xffF6F6F6),
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: Container(
-                                        child: const Icon(
+                                    child: const Icon(
                                       Icons.tv,
                                       size: 30,
-                                    )),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 5,
