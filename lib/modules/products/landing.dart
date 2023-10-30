@@ -132,31 +132,35 @@ class _MainAppState extends State<Home> {
           drawer: Drawer(
             child: ListView(
               children: <Widget>[
-                UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: temaActual),
-                  accountName: const Text('Samuel Cano'),
-                  accountEmail: const Text('20193tn131@utez.edu.mx'),
-                  currentAccountPicture: GestureDetector(
-                    child: const CircleAvatar(backgroundColor: Colors.white),
+                  UserAccountsDrawerHeader(
+                    decoration: BoxDecoration(color: temaActual),
+                    accountName: const Text('Samuel Cano'),
+                    accountEmail: const Text('20193tn131@utez.edu.mx'),
+                    currentAccountPicture: GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                      
+                      child: const CircleAvatar(backgroundColor: Colors.white),
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const ListTile(
-                    title: Text('Home'),
-                    leading: Icon(Icons.home),
+                  InkWell(
+                    onTap: () {},
+                    child: const ListTile(
+                      title: Text('Home'),
+                      leading: Icon(Icons.home),
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const ListTile(
-                    title: Text('Mis compras'),
-                    leading: Icon(Icons.shop),
+                  InkWell(
+                    onTap: () {},
+                    child: const ListTile(
+                      title: Text('Mis compras'),
+                      leading: Icon(Icons.shop),
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const ListTile(
+                  InkWell(
+                    onTap: () {},
+                    child: const ListTile(
                     title: Text('Wishlist'),
                     leading: Icon(Icons.star),
                   ),

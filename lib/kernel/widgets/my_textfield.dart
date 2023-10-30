@@ -11,7 +11,7 @@ class MyTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.obscureText,
-    required this.title,
+    required this.title, required bool enabled,
   });
 
   @override
